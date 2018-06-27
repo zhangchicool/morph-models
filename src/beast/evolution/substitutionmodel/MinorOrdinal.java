@@ -25,7 +25,7 @@ public class MinorOrdinal extends NStatesNoRatesSubstitutionModel {
          * [ b b b 1   ]
          */
 
-        double b = 1.0;
+        double b = 1.0; // equal relative rates if no input
         if (bInput.get() != null) {
             b = bInput.get().getValue();
             if (b < 0.0)
@@ -35,9 +35,9 @@ public class MinorOrdinal extends NStatesNoRatesSubstitutionModel {
         for (int i = 0; i < nrOfStates - 1; i++) {
             for (int j = 0; j < nrOfStates; j++) {
                 if (j == 0 || j == nrOfStates - 1)
-                    relativeRates[nrOfStates * i + j] = 1.0;
+                    relativeRates[nrOfStates * i + j] = 1.0; // adjacent states
                 else
-                    relativeRates[nrOfStates * i + j] = b;
+                    relativeRates[nrOfStates * i + j] = b; // nonadjacent states
             }
         }
     }
