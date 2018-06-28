@@ -2,8 +2,6 @@ package beast.evolution.substitutionmodel;
 
 import beast.core.Citation;
 import beast.core.Description;
-import beast.core.Input;
-import beast.core.parameter.RealParameter;
 
 /**
  * @author Chi Zhang
@@ -11,8 +9,6 @@ import beast.core.parameter.RealParameter;
 
 @Description("")
 public class MinorOrdinal extends NStatesNoRatesSubstitutionModel {
-
-    public final Input<RealParameter> bInput = new Input<>("b", "nonadjacent state change relative rate. b=0:ordered; b>0:unordered");
 
     @Override
     protected void setupRelativeRates() {
@@ -23,13 +19,14 @@ public class MinorOrdinal extends NStatesNoRatesSubstitutionModel {
          * [ b 1   1 b ]
          * [ b b 1   1 ]
          * [ b b b 1   ]
-         */
+         *
+         * nonadjacent relative rate b = 0 : ordered; b > 0 : unordered */
 
-        double b = 1.0; // equal relative rates if no input
-        if (bInput.get() != null) {
-            b = bInput.get().getValue();
-            if (b < 0.0)
-                throw new RuntimeException("relative rate b should be positive.");
+        double rate = 1.0; // equal relative rates by default
+        if (ratesInput.get() != null) {
+            rate = ratesInput.get().getArrayValue();
+            if (rate < 0.0)
+                throw new RuntimeException("relative rate should be positive.");
         }
 
         for (int i = 0; i < nrOfStates - 1; i++) {
@@ -37,7 +34,7 @@ public class MinorOrdinal extends NStatesNoRatesSubstitutionModel {
                 if (j == 0 || j == nrOfStates - 1)
                     relativeRates[nrOfStates * i + j] = 1.0; // adjacent states
                 else
-                    relativeRates[nrOfStates * i + j] = b; // nonadjacent states
+                    relativeRates[nrOfStates * i + j] = rate; // nonadjacent states
             }
         }
     }
