@@ -22,11 +22,11 @@ public class MinorOrdinal extends NStatesNoRatesSubstitutionModel {
          *
          * nonadjacent relative rate b = 0 : ordered; b > 0 : unordered */
 
-        double rate = 1.0; // equal relative rates by default
+        double rate = 0.5; // equal relative rates by default
         if (ratesInput.get() != null) {
             rate = ratesInput.get().getArrayValue();
-            if (rate < 0.0)
-                throw new RuntimeException("relative rate should be positive.");
+            if (rate < 0.0 || rate > 1.0)
+                throw new RuntimeException("relative rate should be in rage [0,1].");
         }
 
         for (int i = 0; i < nrOfStates - 1; i++) {
